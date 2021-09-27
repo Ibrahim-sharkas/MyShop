@@ -8,7 +8,7 @@ using MyShop.Core.Models;
 
 namespace MyShop.DataAccess.InMemory
 {
-    class ProductRepository
+    public class ProductRepository
     {
         ObjectCache cache = MemoryCache.Default;
         List<Product> products;
@@ -49,7 +49,7 @@ namespace MyShop.DataAccess.InMemory
             }
             else
             {
-                throw new Exception("proc=duct not found");
+                throw new Exception("product not found");
             }
         }
         public IQueryable<Product> Collection()
