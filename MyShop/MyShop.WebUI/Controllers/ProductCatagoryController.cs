@@ -5,15 +5,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyShop.Core.Models;
+using MyShop.Core.Contracts;
 
 namespace MyShop.WebUI.Controllers
 {
     public class ProductCatagoryController : Controller
     {
-       InMemoryReposetory< ProductCatagory> context;
-        public ProductCatagoryController()
+        IReposetory<ProductCatagory> context;
+        public ProductCatagoryController(IReposetory<ProductCatagory> context)
         {
-            context = new InMemoryReposetory<ProductCatagory>();
+           this.context = context;
         }
         // GET: ProductCatagory
         public ActionResult Index()
