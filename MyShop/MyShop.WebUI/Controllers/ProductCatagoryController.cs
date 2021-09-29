@@ -10,15 +10,15 @@ namespace MyShop.WebUI.Controllers
 {
     public class ProductCatagoryController : Controller
     {
-        ProductCatagoryRepostory context;
+       InMemoryReposetory< ProductCatagory> context;
         public ProductCatagoryController()
         {
-            context = new ProductCatagoryRepostory();
+            context = new InMemoryReposetory<ProductCatagory>();
         }
         // GET: ProductCatagory
         public ActionResult Index()
         {
-            List<ProductCatagory> productCatagories= context.CatgoryCollection().ToList();
+            List<ProductCatagory> productCatagories= context.Collection().ToList();
             return View(productCatagories);
         }
         public ActionResult Add()
