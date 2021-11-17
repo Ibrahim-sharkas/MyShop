@@ -7,6 +7,7 @@ using MyShop.DataAccess.InMemory;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModels;
 using MyShop.Core.Contracts;
+using System.IO;
 
 namespace MyShop.WebUI.Controllers
 {
@@ -35,7 +36,7 @@ namespace MyShop.WebUI.Controllers
 
         }
         [HttpPost]
-        public ActionResult Create(ProductManagerViewModel p)
+        public ActionResult Create(ProductManagerViewModel p,HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
@@ -43,6 +44,11 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
+                if (file != null)
+                {
+                    p.product.Image = p.product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//")+p.product.Image);
+                }
                 context.Insert(p.product);
                 context.Commit();
                 return RedirectToAction("Index");
@@ -65,20 +71,28 @@ namespace MyShop.WebUI.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(ProductManagerViewModel p, string id)
+        public ActionResult Edit(ProductManagerViewModel p,HttpPostedFileBase file)
         {
-            Product editedProduct = context.Find(id);
-            if (p != null)
+            Product editedProduct = context.Find(p.product.Id);
+            if (editedProduct != null)
             {
                 if (!ModelState.IsValid)
                 {
                     return View(p);
                 }
+                if (file != null)
+                {
+                    editedProduct.Image = p.product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + editedProduct.Image);
+                }
                 editedProduct.Catagorey = p.product.Catagorey;
                 editedProduct.Description = p.product.Description;
                 editedProduct.Name = p.product.Name;
                 editedProduct.Price = p.product.Price;
-                editedProduct.Image = p.product.Image;
+                
+
+
+
                 context.Commit();
                 return RedirectToAction("Index");
             }
