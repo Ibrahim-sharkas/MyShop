@@ -8,7 +8,7 @@ namespace MyShop.Core.Models
 {
    public class BasketItem :BaseEntity
     {
-        public string BasketId { get; set; }
+        public string BasketId { get; set; }// link to the basket id
         public string ProductId { get; set; }
         public int Quantity { get; set; }
     }

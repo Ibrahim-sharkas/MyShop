@@ -14,11 +14,13 @@ namespace MyShop.Services
     {
         IReposetory<Product> productContext;
         IReposetory<Basket> basketContext;
+        IReposetory<BasketItem> basketItemContext;
         public const string BasketSessionName = "eCommerceBasket";
-        public BasketService(IReposetory<Product> ProductContext,IReposetory<Basket> BasketContext)
+        public BasketService(IReposetory<Product> ProductContext,IReposetory<Basket> BasketContext, IReposetory<BasketItem> BasketItemContext)
         {
             this.productContext = ProductContext;
             this.basketContext = BasketContext;
+            this.basketItemContext = BasketItemContext;
         }
         private Basket GetBasket(HttpContextBase httpContext, bool creatIfNull)
         {
@@ -82,15 +84,20 @@ namespace MyShop.Services
             basketContext.Commit();
         }
 
+        //public void RemoveFromBasket(HttpContextBase httpContext, string itemId)
+        //{
+        //    Basket basket = GetBasket(httpContext, true);
+        //    BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id==itemId);
+        //    if (item != null)
+        //    {
+        //        basket.BasketItems.Remove(item);
+        //        basketContext.Commit();
+        //    }
+        //}
         public void RemoveFromBasket(HttpContextBase httpContext, string itemId)
         {
-            Basket basket = GetBasket(httpContext, true);
-            BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id==itemId);
-            if (item != null)
-            {
-                basket.BasketItems.Remove(item);
-                basketContext.Commit();
-            }
+            basketItemContext.Delete(itemId);
+            basketItemContext.Commit();
         }
         public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext)
         {
